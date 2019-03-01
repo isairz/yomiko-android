@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/constraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.ReaderActivity$PlaceholderFragment">
+
+    <com.facebook.drawee.view.SimpleDraweeView android:id="@+id/MangaThumbnail" scaleType="fitXY"
+        android:layout_width="match_parent" android:layout_height="match_parent" android:adjustViewBounds="false"
+        android:background="@android:color/black" app:actualImageScaleType="fitCenter"
+        app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" tools:placeholderImage="@drawable/ic_menu_gallery"
+        fresco:failureImage="@drawable/ic_image_black_24dp"
+        />
+
+</android.support.constraint.ConstraintLayout>
