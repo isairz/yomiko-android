@@ -195,7 +195,9 @@ class ImageListConverter : ElementConverter<ArrayList<String>> {
 
         var list = ArrayList<String>()
         imgList.forEach {
-            list.add(it.groupValues[1].replace("\\", ""))
+            var url = it.groupValues[1].replace("\\", "")
+            url = url.replace("\\.mangashow.*\\.me".toRegex(), ".mangashow3.me")
+            list.add(url)
         }
 
         return list
