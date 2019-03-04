@@ -36,7 +36,12 @@ class MangaListViewModel(val pageType: MangaDataSource.PageType) : ViewModel() {
             MangaDataSource.PageType.Latest -> { page:Long -> MangaShowMeService.getService().getLatestPage(page).cast(MangaListPage::class.java)}
         }
 
-        sourceFactory = MangaDataSourceFactory(getList, compositeDisposable)
+        val startPage = when (pageType) {
+            MangaDataSource.PageType.All -> 0L
+            MangaDataSource.PageType.Latest -> 1L
+        }
+
+        sourceFactory = MangaDataSourceFactory(startPage, getList, compositeDisposable)
         val config = PagedList.Config.Builder()
             .setPageSize(pageSize)
             .setInitialLoadSizeHint(pageSize * 2)
@@ -50,7 +55,7 @@ class MangaListViewModel(val pageType: MangaDataSource.PageType) : ViewModel() {
         val getList =
             {page:Long -> MangaShowMeService.getService().getMangaListPage(page, keyword).cast(MangaListPage::class.java)}
 
-        sourceFactory = MangaDataSourceFactory(getList, compositeDisposable)
+        sourceFactory = MangaDataSourceFactory(0, getList, compositeDisposable)
         val config = PagedList.Config.Builder()
             .setPageSize(pageSize)
             .setInitialLoadSizeHint(pageSize * 2)

@@ -13,6 +13,7 @@ import kr.isair.yomiko.data.NetworkState
 import kr.isair.yomiko.model.MangaInfo
 
 class MangaDataSource(
+    private val startPage: Long,
     private val getList: (page: Long) -> Single<MangaListPage>,
     private val compositeDisposable: CompositeDisposable)
     : PageKeyedDataSource<Long, MangaInfo>() {
@@ -46,7 +47,7 @@ class MangaDataSource(
         networkState.postValue(NetworkState.LOADING)
         initialLoad.postValue(NetworkState.LOADING)
 
-        val currentPage = 0L
+        val currentPage = startPage
         val nextPage = currentPage + 1
 
         //get the initial users from the api

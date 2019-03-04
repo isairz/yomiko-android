@@ -13,6 +13,7 @@ import kr.isair.yomiko.model.MangaInfo
  * in the Repository class.
  */
 class MangaDataSourceFactory(
+    private val startPage: Long,
     private val getList: (page: Long) -> Single<MangaListPage>,
     private val compositeDisposable: CompositeDisposable
 ): DataSource.Factory<Long, MangaInfo>() {
@@ -20,7 +21,7 @@ class MangaDataSourceFactory(
     val mangaListDataSourceLiveData = MutableLiveData<MangaDataSource>()
 
     override fun create(): DataSource<Long, MangaInfo> {
-        val mangaListDataSource = MangaDataSource(getList, compositeDisposable)
+        val mangaListDataSource = MangaDataSource(startPage, getList, compositeDisposable)
         mangaListDataSourceLiveData.postValue(mangaListDataSource)
         return mangaListDataSource
     }
