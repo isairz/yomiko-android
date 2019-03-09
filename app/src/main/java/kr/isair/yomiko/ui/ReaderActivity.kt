@@ -55,8 +55,6 @@ class ReaderActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reader)
 
-        container.rotationY = 180F
-
         container.systemUiVisibility =
                 View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
@@ -112,11 +110,15 @@ class ReaderActivity : AppCompatActivity() {
                 nextChapters = pages.chapterList
                 mSectionsPagerAdapter!!.notifyDataSetChanged()
                 textViewPage.text = getString(R.string.reader_page_format, 1, imgList.size)
+                container.setCurrentItem(mSectionsPagerAdapter!!.count - 1, false)
             }
         })
 
         // Set up the ViewPager with the sections adapter.
         container.adapter = mSectionsPagerAdapter
+        if (mSectionsPagerAdapter != null && mSectionsPagerAdapter!!.count > 0) {
+            container.setCurrentItem(mSectionsPagerAdapter!!.count - 1, false)
+        }
         textViewPage.text = "Loading..."
         container.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {
@@ -124,7 +126,8 @@ class ReaderActivity : AppCompatActivity() {
             override fun onPageScrollStateChanged(state: Int) {
             }
             override fun onPageSelected(position: Int) {
-                textViewPage.text = getString(R.string.reader_page_format, position + 1, imgList.size)
+                val revPos = imgList.size - position - 1
+                textViewPage.text = getString(R.string.reader_page_format, revPos + 1, imgList.size)
             }
         })
 
@@ -167,9 +170,10 @@ class ReaderActivity : AppCompatActivity() {
     inner class SectionsPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
 
         override fun getItem(position: Int): Fragment {
+            val revPos = count - position - 1
             return PlaceholderFragment.newInstance(
-                position + 1,
-                imgList[position],
+                revPos + 1,
+                imgList[revPos],
                 token
             )
         }
@@ -186,7 +190,6 @@ class ReaderActivity : AppCompatActivity() {
             savedInstanceState: Bundle?
         ): View? {
             val rootView = inflater.inflate(R.layout.fragment_reader, container, false)
-            rootView.rotationY = 180F
 
             val url = arguments?.getString(ARG_URL)
             val token = arguments?.getInt(ARG_TOKEN) ?: 0
