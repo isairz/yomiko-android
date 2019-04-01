@@ -1,12 +1,12 @@
 package kr.isair.yomiko.api
 
-import android.os.Parcel
-import android.os.Parcelable
+import UnsafeOkHttpClient
 import io.reactivex.Single
 import kr.isair.yomiko.model.ChapterInfo
-import kr.isair.yomiko.model.TextLink
 import kr.isair.yomiko.model.MangaDetail
 import kr.isair.yomiko.model.MangaInfo
+import kr.isair.yomiko.model.TextLink
+import okhttp3.Request
 import org.jsoup.nodes.Element
 import pl.droidsonroids.jspoon.ElementConverter
 import pl.droidsonroids.jspoon.annotation.Selector
@@ -25,20 +25,20 @@ interface MangaShowMeService {
     @GET("/bbs/page.php?hid=manga_list")
     fun getMangaListPage(@Query("page") page: Long, @Query("stx") keyword: String): Single<MsmMangaListPage>
 
-    @GET("/bbs/board.php?bo_table=msm_manga&page=2")
+    @GET("/bbs/board.php?bo_table=manga")
     fun getLatestPage(@Query("page") page: Long): Single<MsmLatestPage>
 
     @GET("/bbs/page.php?hid=manga_detail")
     fun getMangaInfoPage(@Query("manga_name") manga_name: String): Single<MsmMangaDetail>
 
-    @GET("/bbs/board.php?bo_table=msm_manga")
+    @GET("/bbs/board.php?bo_table=manga")
     fun getChapterPage(@Query("wr_id") uid: String): Single<MsmPageInfo>
 
     companion object {
         fun getService(): MangaShowMeService {
+
             val retrofit = Retrofit.Builder()
-                // .baseUrl("https://mangashow2.me/")
-                .baseUrl("https://188.214.128.5")
+                .baseUrl("https://manamoa.net/")
                 .client(UnsafeOkHttpClient.unsafeOkHttpClient)
                 .addConverterFactory(JspoonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

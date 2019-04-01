@@ -12,6 +12,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import com.facebook.common.logging.FLog
 import com.facebook.drawee.backends.pipeline.Fresco
+import com.facebook.imagepipeline.backends.okhttp3.OkHttpImagePipelineConfigFactory
 import com.facebook.imagepipeline.core.ImagePipelineConfig
 import com.facebook.imagepipeline.listener.RequestListener
 import com.facebook.imagepipeline.listener.RequestLoggingListener
@@ -39,7 +40,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val requestListeners = HashSet<RequestListener>()
         requestListeners.add(RequestLoggingListener())
-        val config = ImagePipelineConfig.newBuilder(this)
+        val config = OkHttpImagePipelineConfigFactory.newBuilder(this, UnsafeOkHttpClient.unsafeOkHttpClient)
+        // val config = ImagePipelineConfig.newBuilder(this)
             // other setters
             .setRequestListeners(requestListeners)
             .build()
