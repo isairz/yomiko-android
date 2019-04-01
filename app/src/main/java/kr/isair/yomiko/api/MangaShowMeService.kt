@@ -83,14 +83,14 @@ class MsmMangaInfo : MangaInfo() {
 }
 
 class MsmLatestPage : MangaListPage() {
-    @Selector(".list-container .list-row")
+    @Selector(".list-container .post-row")
     var mangainfos: List<MsmMangaInfo2> = emptyList()
 
     override fun getMangaList(): List<MangaInfo> = mangainfos
 }
 
 class MsmMangaInfo2 : MangaInfo() {
-    @Selector(value = ".subject", defValue = "NoTitle", converter = OwnTextConverter::class)
+    @Selector(value = ".post-subject a", defValue = "NoTitle", converter = OwnTextConverter::class)
     override lateinit var title: String
 
     @Selector(value = ".author", defValue = "")
@@ -99,16 +99,16 @@ class MsmMangaInfo2 : MangaInfo() {
     @Selector(value = "a", attr = "href")
     override lateinit var link: String
 
-    @Selector(value = ".more-btn a", attr = "href", format = "manga_name=([^&]*)")
+    @Selector(value = ".post-info a", attr = "href", format = "manga_name=([^&]*)")
     override lateinit var uid: String
 
-    @Selector(value = ".thumb", attr = "style", format = "url\\((.+)\\)")
+    @Selector(value = ".img-item img", attr = "src")
     override lateinit var imageUrl: String
 
     @Selector(value = ".tags a")
     override var tags: List<String> = emptyList()
 
-    @Selector(value = ".desc", index = 1)
+    @Selector(value = ".post-info .txt-normal")
     override lateinit var date: String
 }
 
@@ -155,14 +155,14 @@ class MsmChapterInfo() : ChapterInfo() {
 }
 
 class MsmPageInfo {
-    @Selector(value = ".subject h1")
+    @Selector(value = ".toon-title", converter = OwnTextConverter::class)
     lateinit var subject: String
 
     @Selector(value = "*", converter = ImageListConverter::class)
     lateinit var imageList: ArrayList<String>
 
-    @Selector(value = "*", converter = ChapterListConverter::class)
-    lateinit var chapterList: Array<TextLink>
+    // @Selector(value = "*", converter = ChapterListConverter::class)
+    var chapterList: Array<TextLink> = emptyArray()
 
     @Selector(value = "*", converter = ViewCntConverter::class)
     var viewCnt: Int = 0
@@ -196,7 +196,7 @@ class ImageListConverter : ElementConverter<ArrayList<String>> {
         var list = ArrayList<String>()
         imgList.forEach {
             var url = it.groupValues[1].replace("\\", "")
-            url = url.replace("\\.mangashow.*\\.me".toRegex(), ".mangashow3.me")
+            url = url.replace("\\.mangashow.*\\.me".toRegex(), ".mangashow5.me")
             list.add(url)
         }
 
