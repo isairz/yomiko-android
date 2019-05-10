@@ -29,7 +29,7 @@ interface MangaShowMeService {
     fun getLatestPage(@Query("page") page: Long): Single<MsmLatestPage>
 
     @GET("/bbs/page.php?hid=manga_detail")
-    fun getMangaInfoPage(@Query("manga_name") manga_name: String): Single<MsmMangaDetail>
+    fun getMangaInfoPage(@Query("manga_id") manga_name: String): Single<MsmMangaDetail>
 
     @GET("/bbs/board.php?bo_table=manga")
     fun getChapterPage(@Query("wr_id") uid: String): Single<MsmPageInfo>
@@ -38,7 +38,7 @@ interface MangaShowMeService {
         fun getService(): MangaShowMeService {
 
             val retrofit = Retrofit.Builder()
-                .baseUrl("https://manamoa.net/")
+                .baseUrl("https://manamoa3.net/")
                 .client(UnsafeOkHttpClient.unsafeOkHttpClient)
                 .addConverterFactory(JspoonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -69,7 +69,7 @@ class MsmMangaInfo : MangaInfo() {
     @Selector(value = ".post-image a", attr = "href")
     override lateinit var link: String
 
-    @Selector(value = ".post-image a", attr = "href", format = "manga_name=([^&]*)")
+    @Selector(value = ".post-image a", attr = "href", format = "manga_id=([^&]*)")
     override lateinit var uid: String
 
     @Selector(value = ".img-wrap-back", attr = "style", format = "url\\((.+)\\)")
@@ -99,7 +99,7 @@ class MsmMangaInfo2 : MangaInfo() {
     @Selector(value = "a", attr = "href")
     override lateinit var link: String
 
-    @Selector(value = ".post-info a", attr = "href", format = "manga_name=([^&]*)")
+    @Selector(value = ".post-info a", attr = "href", format = "manga_id=([^&]*)")
     override lateinit var uid: String
 
     @Selector(value = ".img-item img", attr = "src")
@@ -122,7 +122,7 @@ class MsmMangaDetail : MangaDetail() {
     @Selector(value = ".post-image a", attr = "href")
     override lateinit var link: String // ???
 
-    @Selector(value = ".post-image a", attr = "href", format = "manga_name=([^&]*)")
+    @Selector(value = ".post-image a", attr = "href", format = "manga_id=([^&]*)")
     override lateinit var uid: String
 
     @Selector(value = ".manga-thumbnail", attr = "style", format = "url\\((.+)\\)")
@@ -196,7 +196,7 @@ class ImageListConverter : ElementConverter<ArrayList<String>> {
         var list = ArrayList<String>()
         imgList.forEach {
             var url = it.groupValues[1].replace("\\", "")
-            url = url.replace("\\.mangashow.*\\.me".toRegex(), ".mangashow5.me")
+            url = url.replace("^http://".toRegex(), "https://")
             list.add(url)
         }
 
